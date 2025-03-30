@@ -1,0 +1,24 @@
+#include <Wire.h>
+
+#define I2C_SLAVE_ADDR 0x04  // Same address as in ESP32
+
+String receivedMessage = "";
+
+void receiveEvent(int bytes) {
+  receivedMessage = "";
+  while (Wire.available()) {
+    char c = Wire.read();
+    receivedMessage += c;
+  }
+  Serial.println("Received: " + receivedMessage);
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(I2C_SLAVE_ADDR);
+  Wire.onReceive(receiveEvent);
+}
+
+void loop() {
+  delay(100);
+}
